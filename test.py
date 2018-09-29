@@ -4,7 +4,7 @@ import converter
 class read_results(unittest.TestCase):
     expected_output = {
             "DSRM_version":       50,
-            "date_time":          1515439537,
+            "date_time":          (18,1,8,20,25,37),
             "date_time_str":      "2018-01-08 20:25:37",
             "e-serialnum":        000000000,
             "tarif_1_delivered":  0.855,
@@ -38,9 +38,9 @@ class read_results(unittest.TestCase):
             "power_L3_-P":        0.000,
             "device_type":        3,
             "g-serialnum":        000000000,
-            "gas_read_time":      1515441300,
+            "gas_read_time":      (18,1,8,20,55,0),
             "gas_read_time_str":  "2018-01-08-20:55:00",
-            "gas_delivered":      1290
+            "gas_delivered":      1.290
             }
 
     def test_read_frombytes(self):

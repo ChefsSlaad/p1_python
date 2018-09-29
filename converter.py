@@ -50,6 +50,11 @@ def read_datagram(datagram):
                     dt_tuple, dt_str = read_date_time(line)
                     result['date_time_str'] = dt_str
                     result[keyname] = dt_tuple
+                elif type == 'gas-reading':
+                    gas_date, gas_date_str, gas_val = read_gas(line)
+                    result['gas_read_time'] = gas_date
+                    result['gas_read_time_str'] = gas_date_str
+                    result['gas_delivered'] = gas_val
                 else:
                     result[keyname] = None
                 break
@@ -71,16 +76,25 @@ def read_line(line, type = 'int'):
         return float(match.group()[1:-4]) #remove brackets, *kwh, convert to float
     elif type == 'Volts':
         return float(match.group()[1:-3]) #remove brackets, *kwh, convert to float
+    elif type == 'Gas':
+        return float(match.group()[1:-4]) #remove brackets, *kwh, convert to float
 
-def read_kWh(line):
-    return read_int(line, type='kWh')
+def read_gas(line):
+    between_brackets = '\(.*?\)' #characters betweem brackets ()
+    match = re.findall(between_brackets, line) #return the stings
+#    print(match)
+    gas_date, gas_date_str = read_date_time(match[0])
+    gas_val  = read_line(match[1], 'Gas')
+    return gas_date, gas_date_str, gas_val
 
 def read_date_time(line):
+#    print(line)
     between_brackets = '\(.*?\)' #characters betweem brackets ()
     match = re.search(between_brackets, line)
     dt = match.group()[1:-1] # format bis YYMMDDHHMMSS. drop the summer/winter time indicator
     dt_tuple = (dt[0:2], dt[2:4], dt[4:6], dt[6:8], dt[8:10], dt[10:12])
     date_time_tuple = tuple(int(x) for x in dt_tuple)
+    # combine the dt_tuple
     date_time_str = "".join("".join(x) for x in zip(dt_tuple, tuple(list('-- ::+'))))[:-1]
     return date_time_tuple,  date_time_str
 
@@ -89,4 +103,5 @@ if __name__ == '__main__':
     with open('sample_datagram') as file:
         for line in file:
             output_file.append(line)
-    print(read_datagram(output_file))
+    for key, value in read_datagram(output_file).items():
+        print('{:20}{}'.format(key, value))
