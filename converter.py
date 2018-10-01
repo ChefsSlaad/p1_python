@@ -55,6 +55,8 @@ def read_datagram(datagram):
                     result['gas_read_time'] = gas_date
                     result['gas_read_time_str'] = gas_date_str
                     result['gas_delivered'] = gas_val
+                elif type == 'fail-log':
+                    result[keyname] = read_fail(line)
                 else:
                     result[keyname] = None
                 break
@@ -70,19 +72,36 @@ def read_line(line, type = 'int'):
         return int(match.group()[1:-1]) #remove brackets, convert to integer
     elif type == 'Amps':
         return int(match.group()[1:-3]) #remove brackets, *kwh, convert to float
+    elif type == 'Sec':
+        return int(match.group()[1:-3]) #remove brackets, *s, convert to int
     elif type == 'kWh':
         return float(match.group()[1:-5]) #remove brackets, *kwh, convert to float
     elif type == 'kW':
-        return float(match.group()[1:-4]) #remove brackets, *kwh, convert to float
+        return float(match.group()[1:-4]) #remove brackets, *kw, convert to float
     elif type == 'Volts':
-        return float(match.group()[1:-3]) #remove brackets, *kwh, convert to float
+        return float(match.group()[1:-3]) #remove brackets, *V, convert to float
     elif type == 'Gas':
-        return float(match.group()[1:-4]) #remove brackets, *kwh, convert to float
+        return float(match.group()[1:-4]) #remove brackets, *m3, convert to float
+
+def read_fail(line):
+    between_brackets = '\(.*?\)' #characters betweem brackets ()
+    match = re.findall(between_brackets, line) #return the values
+    print(match)
+    if len(match) == 0:
+        return None
+    no_of_fails = match.pop(0) #first value is number of fails
+    match.pop(0) # drop the this value -  don't need it. The rest is real fails
+    all_fails = []
+    for i in range(int(no_of_fails[1:-1])):
+        print(match[i*2], match[i*2 +1 ])
+        dt_tup, dt_str = read_date_time(match[i*2])
+        duration = read_line(match[i*2 + 1], 'Sec')
+        all_fails.append((dt_tup,dt_str,duration))
+    return all_fails
 
 def read_gas(line):
     between_brackets = '\(.*?\)' #characters betweem brackets ()
     match = re.findall(between_brackets, line) #return the stings
-#    print(match)
     gas_date, gas_date_str = read_date_time(match[0])
     gas_val  = read_line(match[1], 'Gas')
     return gas_date, gas_date_str, gas_val
