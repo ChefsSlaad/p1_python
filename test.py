@@ -4,19 +4,19 @@ import converter
 class read_results(unittest.TestCase):
     expected_output = {
             "DSRM_version":       50,
-            "date_time":          (18,1,8,20,25,37),
+            "date_time":          (2018,1,8,20,25,37),
             "date_time_str":      "2018-01-08 20:25:37",
-            "e-serialnum":        000000000,
+            "e-serialnum":        4530303033303030303032313234383133,
             "tarif_1_delivered":  0.855,
             "tarif_2_delivered":  0.693,
             "tarif_1_returned":   0.084,
             "tarif_2_returned":   0.000,
             "actual_tarif":       2,
-            "power_delivered":    0.134,
-            "power_returned":     0.000,
+            "power_delivering":    0.134,
+            "power_returning":     0.000,
             "total_power_fails":  8,
             "long_power_fails":   4,
-            "power_fail_log":     [((17, 10, 24, 20, 46, 25), '17-10-24 20:46:25', 305)],  # not sure what the output should look like
+            "power_fail_log":     [((2017, 10, 24, 20, 46, 25), '2017-10-24 20:46:25', 305)],
             "voltage_sags_L1":    3,
             "voltage_sags_L2":    3,
             "voltage_sags_L3":    2,
@@ -25,8 +25,8 @@ class read_results(unittest.TestCase):
             "voltage_swells_L3":   0,
             "text_message":       "",
             "voltage_L1":         229.0,
-            "voltage_l2":         226.0,
-            "voltage_l3":         229.0,
+            "voltage_L2":         226.0,
+            "voltage_L3":         229.0,
             "current_L1":         0,
             "current_L2":         0,
             "current_L3":         0,
@@ -37,19 +37,20 @@ class read_results(unittest.TestCase):
             "power_L2_-P":        0.000,
             "power_L3_-P":        0.000,
             "device_type":        3,
-            "g-serialnum":        000000000,
-            "gas_read_time":      (18,1,8,20,55,0),
-            "gas_read_time_str":  "2018-01-08-20:55:00",
+            "g-serialnum":        4730303136353631323033353830313133,
+            "gas_read_time":      (2018,1,8,20,55,0),
+            "gas_read_time_str":  "2018-01-08 20:55:00",
             "gas_delivered":      1.29
             }
 
     def test_read_frombytes(self):
-        filename = 'sample_datagram'
-        with open(filename) as f:
-            output_file = f.read()
+        output_file = []
+        with open('sample_datagram') as file:
+            for line in file:
+                output_file.append(line)
         output = converter.read_datagram(output_file)
         for key, value in self.expected_output.items():
-#            self.assertIn(key, output.keys())
+            self.assertIn(key, output.keys())
             self.assertEqual(output[key], self.expected_output[key])
 
 if __name__ == '__main__':

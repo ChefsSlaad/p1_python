@@ -31,9 +31,9 @@ datagram_keys = (
 ('1-0:21.7.0',  "power_L1_+P",        'kW'),
 ('1-0:41.7.0',  "power_L2_+P",        'kW'),
 ('1-0:61.7.0',  "power_L3_+P",        'kW'),
-('1-0:21.7.0',  "power_L1_-P",        'kW'),
-('1-0:21.7.0',  "power_L2_-P",        'kW'),
-('1-0:21.7.0',  "power_L3_-P",        'kW'),
+('1-0:22.7.0',  "power_L1_-P",        'kW'),
+('1-0:42.7.0',  "power_L2_-P",        'kW'),
+('1-0:62.7.0',  "power_L3_-P",        'kW'),
 ('0-1:24.1.0',  "device_type",        'int'),
 ('0-1:96.1.0',  "g-serialnum",        'int'),
 ('0-1:24.2.1',  "gas_delivered",      'gas-reading')
@@ -85,15 +85,13 @@ def read_line(line, type = 'int'):
 
 def read_fail(line):
     between_brackets = '\(.*?\)' #characters betweem brackets ()
-    match = re.findall(between_brackets, line) #return the values
-    print(match)
+    match = list(findall(between_brackets, line)) #return the values
     if len(match) == 0:
         return None
     no_of_fails = match.pop(0) #first value is number of fails
     match.pop(0) # drop the this value -  don't need it. The rest is real fails
     all_fails = []
     for i in range(int(no_of_fails[1:-1])):
-        print(match[i*2], match[i*2 +1 ])
         dt_tup, dt_str = read_date_time(match[i*2])
         duration = read_line(match[i*2 + 1], 'Sec')
         all_fails.append((dt_tup,dt_str,duration))
@@ -101,7 +99,7 @@ def read_fail(line):
 
 def read_gas(line):
     between_brackets = '\(.*?\)' #characters betweem brackets ()
-    match = re.findall(between_brackets, line) #return the stings
+    match = list(findall(between_brackets, line)) #return the stings
     gas_date, gas_date_str = read_date_time(match[0])
     gas_val  = read_line(match[1], 'Gas')
     return gas_date, gas_date_str, gas_val
@@ -111,11 +109,20 @@ def read_date_time(line):
     between_brackets = '\(.*?\)' #characters betweem brackets ()
     match = re.search(between_brackets, line)
     dt = match.group()[1:-1] # format bis YYMMDDHHMMSS. drop the summer/winter time indicator
-    dt_tuple = (dt[0:2], dt[2:4], dt[4:6], dt[6:8], dt[8:10], dt[10:12])
+    dt_tuple = ('20' + dt[0:2], dt[2:4], dt[4:6], dt[6:8], dt[8:10], dt[10:12])
     date_time_tuple = tuple(int(x) for x in dt_tuple)
     # combine the dt_tuple
     date_time_str = "".join("".join(x) for x in zip(dt_tuple, tuple(list('-- ::+'))))[:-1]
     return date_time_tuple,  date_time_str
+
+
+def findall(pattern, string):
+    while True:
+        match = re.search(pattern, string)
+        if not match:
+            break
+        yield match.group(0)
+        string = string[match.end():]
 
 if __name__ == '__main__':
     output_file = []
