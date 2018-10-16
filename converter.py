@@ -14,7 +14,7 @@ datagram_keys = (
 ('1-0:2.7.0',   "power_returning",    'kW'),
 ('0-0:96.7.21', "total_power_fails",  'int'),
 ('0-0:96.7.9',  "long_power_fails",   'int'),
-('1-0:99.97.0', "power_fail_log",     'fail-log'),  # not sure what the output should look like
+('1-0:99.97.0', "power_fail_log",     'fail-log'),
 ('1-0:32.32.0', "voltage_sags_L1",    'int'),
 ('1-0:52.32.0', "voltage_sags_L2",    'int'),
 ('1-0:72.32.0', "voltage_sags_L3",    'int'),

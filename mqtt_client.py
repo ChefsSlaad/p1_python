@@ -4,7 +4,7 @@ from time import sleep
 
 def basic_callback(topic, message):
     response = message.decode('utf-8')
-    print(topic.decode('utf-8'), response)
+    print(topic.decode('utf-8'), response)dir()m
 
 def test_run():
     topics = ('home/hall/mirror', 'home/hall/mirror/set')
