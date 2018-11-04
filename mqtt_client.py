@@ -4,7 +4,7 @@ from time import sleep
 
 def basic_callback(topic, message):
     response = message.decode('utf-8')
-    print(topic.decode('utf-8'), response)dir()m
+    print(topic.decode('utf-8'), response)
 
 def test_run():
     topics = ('home/hall/mirror', 'home/hall/mirror/set')
@@ -28,7 +28,7 @@ class mqtt_client():
         self.__connect()
 
     def __str__(self):
-        results = 'mqtt client\n  id      {}\n  server    {}\n  callback {}\n  topics  {}\n'
+        results = 'mqtt client\n  id       {}\n  server   {}\n  callback {}\n  topics   {}\n'
         return results.format(self.id, self.server_ip, self.__callback, self.topics)
 
 

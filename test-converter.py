@@ -1,6 +1,5 @@
 import unittest
 import converter
-import mqtt_client
 
 class read_results(unittest.TestCase):
     expected_output = {
