@@ -41,7 +41,7 @@ datagram_keys = (
 
 def read_datagram(datagram):
     result = {}
-    for line in datagram:
+    for line in datagram.splitlines():
         for re_str, keyname, type in datagram_keys:
             if re.match(re_str, line):
                 if type in ('int', 'kWh', 'kW', 'Volts', 'Amps', 'string'):
@@ -95,7 +95,7 @@ def read_fail(line):
         dt_tup, dt_str = read_date_time(match[i*2])
         duration = read_line(match[i*2 + 1], 'Sec')
         all_fails.append((dt_tup,dt_str,duration))
-    return all_fails
+    return tuple(all_fails)
 
 def read_gas(line):
     between_brackets = '\(.*?\)' #characters betweem brackets ()
@@ -114,7 +114,6 @@ def read_date_time(line):
     # combine the dt_tuple
     date_time_str = "".join("".join(x) for x in zip(dt_tuple, tuple(list('-- ::+'))))[:-1]
     return date_time_tuple,  date_time_str
-
 
 def findall(pattern, string):
     while True:
