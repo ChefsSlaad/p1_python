@@ -1,0 +1,16 @@
+[Unit]
+Description=p1 smart meter reader
+
+After=network.target
+
+[Service]
+user=%i
+Type=simple
+ExecStart=/home/pi/projects/p1_reader/p1_reader.py &
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+
+
