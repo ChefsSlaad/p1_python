@@ -13,7 +13,7 @@ refresh_int = 60
 
 def main():
     secs = time()
-    mqtt_client = mqtt.Client(client_name)
+    mqtt_client = mqtt.Client()
     mqtt_client.connect(mqtt_server, 1883)
     max_time = refresh_int
     datagram = read_datagram(next(read_telegram()))
@@ -28,7 +28,7 @@ def main():
 
     while True:
         print('.' , end = '')
-        if time()-secs > max_time: 
+        if time()-secs > max_time:
             datagram = read_datagram(next(read_telegram()))
             if pwr_time != datagram['date_time_str']:
                 pwr      = datagram['tarif_1_delivered'] + datagram['tarif_2_delivered']
@@ -45,7 +45,7 @@ def main():
 #            print('{:3} current gas   {:10} last gas   {:10} diff {}'.format(round(time()-secs),gas, gas_old, gas_avg))
 #            print(round(time()-secs), 'gas', gas_avg, 'power', pwr_avg)
 #            print('gas {:10} power {:10}'.format(datagram['gas_avg'], datagram['power_avg']))
-            print('\n{} total power {} total gas {} power used {} gas used {}'.format(datagram['date_time_str'], pwr, gas, pwr_avg, gas_avg)) 
+            print('\n{} total power {} total gas {} power used {} gas used {}'.format(datagram['date_time_str'], pwr, gas, pwr_avg, gas_avg))
             mqtt_client.publish(power_topic, dumps(datagram))
             secs = time()
         sleep(1)
