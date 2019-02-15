@@ -4,7 +4,7 @@ import converter
 class read_results(unittest.TestCase):
     expected_output = {
             "DSRM_version":       50,
-            "date_time":          (2018,1,8,20,25,37),
+            "date_time":          1515439537.0,
             "date_time_str":      "2018-01-08 20:25:37",
             "e-serialnum":        4530303033303030303032313234383133,
             "tarif_1_delivered":  0.855,
@@ -16,7 +16,7 @@ class read_results(unittest.TestCase):
             "power_returning":     0.000,
             "total_power_fails":  8,
             "long_power_fails":   4,
-            "power_fail_log":     [((2017, 10, 24, 20, 46, 25), '2017-10-24 20:46:25', 305)],
+            "power_fail_log":     ((1508870785.0, '2017-10-24 20:46:25', 305),),
             "voltage_sags_L1":    3,
             "voltage_sags_L2":    3,
             "voltage_sags_L3":    2,
@@ -38,7 +38,7 @@ class read_results(unittest.TestCase):
             "power_L3_-P":        0.000,
             "device_type":        3,
             "g-serialnum":        4730303136353631323033353830313133,
-            "gas_read_time":      (2018,1,8,20,55,0),
+            "gas_read_time":      1515441300.0,
             "gas_read_time_str":  "2018-01-08 20:55:00",
             "gas_delivered":      1.29
             }

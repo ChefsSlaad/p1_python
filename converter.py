@@ -1,4 +1,5 @@
 import re
+from time import time, mktime, strptime
 
 # re_dting     keyname             how to process
 datagram_keys = (
@@ -42,6 +43,7 @@ datagram_keys = (
 def read_datagram(datagram):
     result = {}
     for line in datagram.splitlines():
+#    for line in datagram:
         for re_str, keyname, type in datagram_keys:
             if re.match(re_str, line):
                 if type in ('int', 'kWh', 'kW', 'Volts', 'Amps', 'string'):
@@ -109,11 +111,10 @@ def read_date_time(line):
     between_brackets = '\(.*?\)' #characters betweem brackets ()
     match = re.search(between_brackets, line)
     dt = match.group()[1:-1] # format bis YYMMDDHHMMSS. drop the summer/winter time indicator
+    date_time_epoch = mktime(strptime(dt[:-1], "%y%m%d%H%M%S")) # format for dt = yymmddhhmmssW
     dt_tuple = ('20' + dt[0:2], dt[2:4], dt[4:6], dt[6:8], dt[8:10], dt[10:12])
-    date_time_tuple = tuple(int(x) for x in dt_tuple)
-    # combine the dt_tuple
     date_time_str = "".join("".join(x) for x in zip(dt_tuple, tuple(list('-- ::+'))))[:-1]
-    return date_time_tuple,  date_time_str
+    return date_time_epoch,  date_time_str
 
 def findall(pattern, string):
     while True:
