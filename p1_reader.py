@@ -19,11 +19,12 @@ def main():
     datagram = read_datagram(next(read_telegram()))
     gas      = datagram['gas_delivered']
     gas_old  = gas
-    gas_time_str = datagram['gas_read_time_str']
     gas_time = datagram['gas_read_time']
+    gas_time_old = gas_time
     pwr      = datagram['tarif_1_delivered'] + datagram['tarif_2_delivered']
     pwr_old  = pwr
-    pwr_time = datagram['date_time_str']
+    pwr_time = datagram['date_time']
+    pwr_time_old = pwr_time
     pwr_avg  = '-'
     gas_avg  = '-'
 
@@ -31,16 +32,19 @@ def main():
         print('.' , end = '')
         if time()-secs > max_time:
             datagram = read_datagram(next(read_telegram()))
-            if pwr_time != datagram['date_time_str']:
+            if pwr_time != datagram['date_time']:
+                pwr_time_old = pwr_time
+                pwr_time = datagram['date_time']
+                pwr_time_delta = pwr_time - pwr_time_old
                 pwr      = datagram['tarif_1_delivered'] + datagram['tarif_2_delivered']
-                pwr_avg  = round((pwr - pwr_old)*(3600000/refresh_int),3) # convert from kWh to Ws
+                pwr_avg  = round((((pwr - pwr_old)*3600000)/pwr_time_delta),0) # convert from kWh to Ws
                 pwr_old = pwr
             if gas_time != datagram['gas_read_time']:
                 gas_time_old = gas_time
                 gas_time = datagram['gas_read_time']
                 gas_time_delta = gas_time - gas_time_old
                 gas      = datagram['gas_delivered']
-                gas_avg  = round(((gas - gas_old)*1000)/gas_time_delta),3) #gas refresh is 5 min
+                gas_avg  = round((((gas - gas_old)*1000)/gas_time_delta),0) #gas refresh is 5 min
                 gas_old = gas
             datagram['power_avg'] = pwr_avg # either None, old value or new value, dept on update
             datagram['gas_avg'] = gas_avg   # either None, old value or new value, dept on update
