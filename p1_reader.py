@@ -37,7 +37,11 @@ def main():
                 pwr_time = datagram['date_time']
                 pwr_time_delta = pwr_time - pwr_time_old
                 pwr      = datagram['tarif_1_delivered'] + datagram['tarif_2_delivered']
+<<<<<<< HEAD
                 pwr_avg  = round((((pwr - pwr_old)*3600000)/pwr_time_delta),0) # convert from kWh to Ws
+=======
+                pwr_avg  = round((pwr - pwr_old)*(3600000/pwr_time_delta),3) # convert from kWh to Ws
+>>>>>>> d0d4debd37cb539e941cc8254fe684f101f6f634
                 pwr_old = pwr
             if gas_time != datagram['gas_read_time']:
                 gas_time_old = gas_time
