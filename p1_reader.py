@@ -37,14 +37,14 @@ def main():
                 pwr_time = datagram['date_time']
                 pwr_time_delta = pwr_time - pwr_time_old
                 pwr      = datagram['tarif_1_delivered'] + datagram['tarif_2_delivered']
-                pwr_avg  = round((((pwr - pwr_old)*3600000)/pwr_time_delta),0) # convert from kWh to Ws
+                pwr_avg  = round(((pwr - pwr_old)*60*60*1000)/pwr_time_delta) # convert from kWh to Ws
                 pwr_old = pwr
             if gas_time != datagram['gas_read_time']:
                 gas_time_old = gas_time
                 gas_time = datagram['gas_read_time']
                 gas_time_delta = gas_time - gas_time_old
                 gas      = datagram['gas_delivered']
-                gas_avg  = round((((gas - gas_old)*1000)/gas_time_delta),0) #gas refresh is 5 min
+                gas_avg  = round(((gas - gas_old)*1000*1000)/gas_time_delta) #convert to ml / sec
                 gas_old = gas
             datagram['power_avg'] = pwr_avg # either None, old value or new value, dept on update
             datagram['gas_avg'] = gas_avg   # either None, old value or new value, dept on update
