@@ -46,6 +46,7 @@ def main():
                 gas      = datagram['gas_delivered']
                 gas_avg  = round(((gas - gas_old)*1000*1000)/gas_time_delta) #convert to ml / sec
                 gas_old = gas
+            datagram['power_delivered'] = pwr # total power delivered
             datagram['power_avg'] = pwr_avg # either None, old value or new value, dept on update
             datagram['gas_avg'] = gas_avg   # either None, old value or new value, dept on update
 #            print('{:3} current_power {:10} last_power {:10} diff {}'.format(round(time()-secs), pwr  , pwr_old, pwr_avg))
