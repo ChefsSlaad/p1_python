@@ -49,6 +49,7 @@ def main():
             datagram['power_delivered'] = pwr # total power delivered
             datagram['power_avg'] = pwr_avg # either None, old value or new value, dept on update
             datagram['gas_avg'] = gas_avg   # either None, old value or new value, dept on update
+            datagram['last_reset'] = '1970-01-01T00:00:00+00:00'
 #            print('{:3} current_power {:10} last_power {:10} diff {}'.format(round(time()-secs), pwr  , pwr_old, pwr_avg))
 #            print('{:3} current gas   {:10} last gas   {:10} diff {}'.format(round(time()-secs),gas, gas_old, gas_avg))
 #            print(round(time()-secs), 'gas', gas_avg, 'power', pwr_avg)
